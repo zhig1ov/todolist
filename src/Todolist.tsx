@@ -1,6 +1,7 @@
 import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
 import {TaskType} from './App';
 import {Button} from './Button';
+import {useAutoAnimate} from '@formkit/auto-animate/react';
 
 type TodolistPropsType = {
     title: string;
@@ -19,6 +20,7 @@ export const Todolist = ({title, tasks, removeTask, removeAllTasks, addTask, cha
     const [error, setError] = useState<string | null>(null)
 
     let tasksForTodolist = tasks
+    const [listRef] = useAutoAnimate<HTMLUListElement>();
 
     if (filter === 'active') {
         tasksForTodolist = tasks.filter(task => !task.isDone)
@@ -73,7 +75,7 @@ export const Todolist = ({title, tasks, removeTask, removeAllTasks, addTask, cha
             {tasks.length === 0 ? (
                 <p>No tasks</p>
             ) : (
-                <ul>
+                <ul ref={listRef}>
                     {tasksForTodolist.map((t: TaskType) => {
                         const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             const newStatusValue = e.currentTarget.checked;
