@@ -1,12 +1,6 @@
 import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
-import {FilterValuesType} from './App';
+import {FilterValuesType, TaskType} from './App';
 import {Button} from './Button';
-
-type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
 type TodolistPropsType = {
     id: string
@@ -17,6 +11,7 @@ type TodolistPropsType = {
     addTask: (title: string, todolistId: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
     filter: FilterValuesType
+    removeTodolist: (todolistId: string) => void
 }
 
 export const Todolist = (props: TodolistPropsType) => {
@@ -47,10 +42,17 @@ export const Todolist = (props: TodolistPropsType) => {
     const onActiveClickHandler = () => props.changeFilter('active', props.id);
     const onCompletedClickHandler = () => props.changeFilter('completed', props.id);
 
+    const removeTodolistHandler = () => {
+        props.removeTodolist(props.id)
+    }
+
     return <div>
-        <h3>{props.title}</h3>
+        <div className={'todolist-title-container'}>
+            <h3>{props.title}</h3>
+            <Button title='X' onClick={removeTodolistHandler}/>
+        </div>
         <div>
-            <input value={title}
+        <input value={title}
                    onChange={onChangeHandler}
                    onKeyDown={onKeyPressHandler}
                    className={error ? 'error' : ''}

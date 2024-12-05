@@ -11,6 +11,16 @@ type todolistsType = {
     filter: FilterValuesType;
 }
 
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
+
+type TasksStateType = {
+    [key: string]: TaskType[]
+}
+
 function App() {
 
     let todolistID1 = v1();
@@ -21,7 +31,7 @@ function App() {
         {id: todolistID2, title: 'What to buy', filter: 'all'},
     ])
 
-    let [tasks, setTasks] = useState({
+    let [tasks, setTasks] = useState<TasksStateType>({
         [todolistID1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -39,26 +49,26 @@ function App() {
     });
 
     const removeTask = (id: string, todolistId: string) => {
-        tasks[todolistId] = tasks[todolistId].filter(t => t.id !== id);
-        setTasks({...tasks});
+        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== id)});
     }
 
     const addTask = (title: string, todolistId: string) => {
-        let task = {id: v1(), title: title, isDone: false};
-        tasks[todolistId] = [task, ...tasks[todolistId]];
-        setTasks({...tasks});
+        const newTask = {id: v1(), title: title, isDone: false};
+        setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]});
     }
 
     const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
-        let task = tasks[todolistId].find(t => t.id === taskId);
-        if (task) {
-            task.isDone = isDone;
-        }
-        setTasks({...tasks});
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => (t.id === taskId ? {...t, isDone} : t))});
     }
 
     const changeFilter = (value: FilterValuesType, todolistId: string) => {
         setTodolists(todolists.map(filtered => filtered.id === todolistId ? {...filtered, filter: value} : filtered))
+    }
+
+    const removeTodolist = (todolistId: string) => {
+        setTodolists(todolists.filter(tl => tl.id !== todolistId))
+        delete tasks[todolistId]
+        setTasks({...tasks})
     }
 
     return (
@@ -83,6 +93,7 @@ function App() {
                     addTask={addTask}
                     changeTaskStatus={changeStatus}
                     filter={tl.filter}
+                    removeTodolist={removeTodolist}
                 />)
             })}
 
