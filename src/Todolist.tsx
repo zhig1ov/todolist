@@ -1,6 +1,7 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType, TaskType} from './App';
-import {Button} from './Button';
+import {Button} from './components/Button/Button';
+import AddItemForm from './components/AddItemForm/AddItemForm';
 
 type TodolistPropsType = {
     id: string
@@ -15,28 +16,6 @@ type TodolistPropsType = {
 }
 
 export const Todolist = (props: TodolistPropsType) => {
-    let [title, setTitle] = useState('')
-    let [error, setError] = useState<string | null>(null)
-
-    const addTask = () => {
-        if (title.trim() !== '') {
-            props.addTask(title.trim(), props.id);
-            setTitle('');
-        } else {
-            setError('Title is required');
-        }
-    }
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
-    }
-
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
-        if (e.key === 'Enter') {
-            addTask();
-        }
-    }
 
     const onAllClickHandler = () => props.changeFilter('all', props.id);
     const onActiveClickHandler = () => props.changeFilter('active', props.id);
@@ -46,20 +25,16 @@ export const Todolist = (props: TodolistPropsType) => {
         props.removeTodolist(props.id)
     }
 
+    const addTaskCallback = (title: string) => {
+        props.addTask(title, props.id)
+    }
+
     return <div>
         <div className={'todolist-title-container'}>
             <h3>{props.title}</h3>
-            <Button title='X' onClick={removeTodolistHandler}/>
+            <Button title="X" onClick={removeTodolistHandler}/>
         </div>
-        <div>
-        <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyDown={onKeyPressHandler}
-                   className={error ? 'error' : ''}
-            />
-            <Button onClick={addTask} title={'+'}></Button>
-            {error && <div className="error-message">{error}</div>}
-        </div>
+        <AddItemForm addItem={addTaskCallback}/>
         <ul>
             {
                 props.tasks.map(t => {
