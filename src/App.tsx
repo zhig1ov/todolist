@@ -19,7 +19,7 @@ export type FilterValuesType = 'all' | 'active' | 'completed';
 
 type ThemeMode = 'dark' | 'light';
 
-type TodolistsType = {
+export type TodolistsType = {
     id: string;
     title: string;
     filter: FilterValuesType;
@@ -48,13 +48,13 @@ function App() {
     })
 
 
-    let todolistID1 = v1();
-    let todolistID2 = v1();
-
-    let [todolists, setTodolists] = useState<Array<TodolistsType>>([
-        {id: todolistID1, title: 'What to learn', filter: 'all'},
-        {id: todolistID2, title: 'What to buy', filter: 'all'},
-    ])
+    // let todolistID1 = v1();
+    // let todolistID2 = v1();
+    //
+    // let [todolists, setTodolists] = useState<Array<TodolistsType>>([
+    //     {id: todolistID1, title: 'What to learn', filter: 'all'},
+    //     {id: todolistID2, title: 'What to buy', filter: 'all'},
+    // ])
 
     let [tasks, setTasks] = useState<TasksStateType>({
         [todolistID1]: [
