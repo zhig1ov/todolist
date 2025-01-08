@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from 'react';
 import {filterButtonsContainerSx, getListItemSx} from './Todolist.styles'
-import {FilterValuesType, TaskType} from './App';
+import {FilterValuesType, TaskType} from './app/App';
 import AddItemForm from './components/AddItemForm/AddItemForm';
 import {EditabledSpan} from './components/EditabledSpan/EditabledSpan';
 import Button from '@mui/material/Button';

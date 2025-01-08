@@ -1,9 +1,9 @@
-import {TodolistType} from '../App';
+import {TodolistType} from '../app/App';
 import {v1} from 'uuid';
 import {
     addTodolistAC,
-    changedTodolistFilterAC,
-    editTodolistTitleAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
     removeTodolistAC,
     todolistReducer
 } from './todolistReducer';
@@ -38,7 +38,7 @@ test('ADD TODOLIST', () => {
 })
 
 test('EDIT_TODOLIST_TITLE', () => {
-    const action = editTodolistTitleAC(todolistId2, 'New Title')
+    const action = changeTodolistTitleAC({id: todolistId2, title: 'New Title'})
 
     const endState = todolistReducer(startState, action)
 
@@ -48,7 +48,7 @@ test('EDIT_TODOLIST_TITLE', () => {
 })
 
 test('Change todolist filter', () => {
-    const action = changedTodolistFilterAC(todolistId2, 'active')
+    const action = changeTodolistFilterAC({id: todolistId2, filter: 'active'})
 
     const endState = todolistReducer(startState, action)
 
