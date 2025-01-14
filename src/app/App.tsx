@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import {Todolist} from '../Todolist';
 import AddItemForm from '../components/AddItemForm/AddItemForm';
@@ -38,7 +38,7 @@ export type TasksStateType = {
     [key: string]: TaskType[]
 }
 
-function AppWithRedux() {
+function App() {
     const [themeMode, setThemeMode] = useState<ThemeMode>('light')
     const todolists = useSelector<RootState, TodolistType[]>(state => state.todolists)
     const tasks = useSelector<RootState, TasksStateType>(state => state.tasks)
@@ -55,43 +55,43 @@ function AppWithRedux() {
     const dispatch = useDispatch()
 
 
-    const removeTask = (taskId: string, todolistId: string) => {
+    const removeTask = useCallback((taskId: string, todolistId: string) => {
         dispatch(removeTaskAC({taskId, todolistId}));
-    }
+    }, [dispatch])
 
-    const addTask = (title: string, todolistId: string) => {
+    const addTask = useCallback((title: string, todolistId: string) => {
         dispatch(addTaskAC({title, todolistId}));
-    }
+    }, [dispatch])
 
-    const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
+    const changeStatus = useCallback((taskId: string, isDone: boolean, todolistId: string) => {
         dispatch(changeTaskStatusAC({taskId, todolistId, isDone}));
-    }
+    }, [dispatch])
 
-    const changeTaskTitle = (taskId: string, title: string, todolistId: string) => {
+    const changeTaskTitle = useCallback((taskId: string, title: string, todolistId: string) => {
         dispatch(changeTaskTitleAC({taskId, todolistId, title}));
-    }
+    }, [dispatch])
 
-    const changeFilter = (filter: FilterValuesType, id: string) => {
+    const changeFilter = useCallback((filter: FilterValuesType, id: string) => {
         dispatch(changeTodolistFilterAC({id, filter}))
-    }
+    }, [dispatch])
 
-    const removeTodolist = (todolistId: string) => {
+    const removeTodolist = useCallback((todolistId: string) => {
         const action = removeTodolistAC(todolistId)
         dispatch(action)
-    }
+    }, [dispatch])
 
-    const addTodolist = (title: string) => {
+    const addTodolist = useCallback((title: string) => {
         const action = addTodolistAC(title)
         dispatch(action)
-    }
+    }, [dispatch])
 
-    const updateTodolist = (id: string, title: string) => {
+    const updateTodolist = useCallback((id: string, title: string) => {
         dispatch(changeTodolistTitleAC({id, title}))
-    }
+    }, [dispatch])
 
-    const changeModeHandler = () => {
+    const changeModeHandler = useCallback(() => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light')
-    }
+    }, [themeMode])
 
     return (
         <ThemeProvider theme={theme}>
@@ -116,15 +116,6 @@ function AppWithRedux() {
 
                 <Grid container spacing={4}>
                     {todolists.map(tl => {
-                        let tasksForTodolist = tasks[tl.id];
-
-                        if (tl.filter === 'active') {
-                            tasksForTodolist = tasks[tl.id].filter(t => !t.isDone);
-                        }
-                        if (tl.filter === 'completed') {
-                            tasksForTodolist = tasks[tl.id].filter(t => t.isDone);
-                        }
-
                         return (
                             <Grid key={tl.id}>
                                 <Paper sx={{p: '0 20px 20px 20px'}}>
@@ -132,7 +123,7 @@ function AppWithRedux() {
                                         title={tl.title}
                                         key={tl.id}
                                         id={tl.id}
-                                        tasks={tasksForTodolist}
+                                        tasks={tasks[tl.id]}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
@@ -152,4 +143,4 @@ function AppWithRedux() {
     );
 }
 
-export default AppWithRedux;
+export default App;

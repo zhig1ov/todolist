@@ -6,7 +6,7 @@ type EditabledSpanPropsType = {
     onChange: (newTitle: string) => void
 }
 
-export const EditabledSpan = ({title, onChange}: EditabledSpanPropsType) => {
+export const EditabledSpan = React.memo(({title, onChange}: EditabledSpanPropsType) => {
     const [editMode, setEditMode] = React.useState<boolean>(false);
     const [inputValue, setInputValue] = React.useState<string>(title);
 
@@ -43,4 +43,4 @@ export const EditabledSpan = ({title, onChange}: EditabledSpanPropsType) => {
             }
         </>
     )
-}
+})

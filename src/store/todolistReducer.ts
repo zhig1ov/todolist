@@ -25,7 +25,6 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
             return [
                 {id: action.payload.id, title: action.payload.title, filter: 'all'},
                 ...state,
-                //Дописать добавление тасок
             ]
         case 'EDIT_TODOLIST_TITLE':
             return state.map(tl => tl.id === action.payload.id ? {...tl, title: action.payload.title} : tl)
