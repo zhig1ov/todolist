@@ -31,7 +31,7 @@ const AddItemForm = React.memo(({addItem}: AddItemFormPropsType) => {
         if (e.key === 'Enter') {
             addItemHandler();
         }
-    }, [addItemHandler])
+    }, [addItemHandler, error])
 
     return (
         <div>
